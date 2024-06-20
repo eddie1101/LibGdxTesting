@@ -35,6 +35,8 @@ public class LineIntersection {
 
         for(int i = 0; i < vertexPositions.size() - 1; i++) {
 
+            Vector2 intersection = new Vector2();
+
             Vector2 A = line.getP1().cpy();
             Vector2 B = line.getP2().cpy();
             Vector2 C = vertexPositions.get(i).cpy();
@@ -50,22 +52,43 @@ public class LineIntersection {
             float sideMinY = Math.min(C.y, D.y);
             float sideMaxY = Math.max(C.y, D.y);
 
-            Vector2 AB = B.cpy().sub(A);
-            Vector2 CD = D.cpy().sub(C);
+            float slope =  (B.y - A.y) / (B.x - A.x);
+            float b = A.y - (slope * A.x);
 
-            float determinant = AB.crs(CD);
-            //Lines are not parallel
-            if(determinant != 0) {
-                Vector2 AC = C.cpy().sub(A);
-                float t1 = AC.crs(CD) / determinant;
-//                float t2 = -AB.crs(AC) / determinant;
-                Vector2 intersection = A.cpy().add(AB.scl(t1));
-                boolean onSide = intersection.x >= sideMinX && intersection.x <= sideMaxX && intersection.y >= sideMinY && intersection.y <= sideMaxY;
-                boolean onLine = intersection.x >= lineMinX && intersection.x <= lineMaxX && intersection.y >=lineMinY && intersection.y <= lineMaxY;
-                if(onSide && onLine) {
-                    intersections.add(intersection);
+            //If the side of the polygon is vertical
+            if(D.x - C.x == 0) {
+                float x = C.x;
+                float y = slope * x + b;
+                intersection = new Vector2(x, y);
+
+            //If the side of the polygon is horizontal
+            } else if(D.y - C.y == 0) {
+                float y = C.y;
+                float x = (-b + y) / slope;
+                intersection = new Vector2(x, y);
+
+            //If the side of the polygon is NOT axis-aligned
+            } else {
+                //https://www.youtube.com/watch?v=5FkOO1Wwb8w
+                Vector2 AB = B.cpy().sub(A);
+                Vector2 CD = D.cpy().sub(C);
+
+                float determinant = AB.crs(CD);
+                //Lines are not parallel
+                if (determinant != 0) {
+                    Vector2 AC = C.cpy().sub(A);
+                    float t1 = AC.crs(CD) / determinant;
+                    //float t2 = -AB.crs(AC) / determinant;
+                    intersection = A.cpy().add(AB.scl(t1));
                 }
             }
+
+            boolean onSide = intersection.x >= sideMinX && intersection.x <= sideMaxX && intersection.y >= sideMinY && intersection.y <= sideMaxY;
+            boolean onLine = intersection.x >= lineMinX && intersection.x <= lineMaxX && intersection.y >= lineMinY && intersection.y <= lineMaxY;
+            if (onSide && onLine) {
+                intersections.add(intersection);
+            }
+
         }
 
         intersections.forEach(this::checkAndSetClosestPoint);
