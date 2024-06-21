@@ -59,6 +59,16 @@ public abstract class Polygon extends RenderableMovableShape {
         return vertices;
     }
 
+    public List<Line> getSides() {
+        List<Vector2> vertexList = getVertexPositions();
+        List<Line> lineList = new ArrayList<>();
+        vertexList.add(vertexList.get(0));
+        for(int i = 0; i < vertexList.size() - 1; i++) {
+            lineList.add(new Line(vertexList.get(i), vertexList.get(i + 1)));
+        }
+        return lineList;
+    }
+
     public Vector2 getCenter() {
         return getCenter(false);
     }

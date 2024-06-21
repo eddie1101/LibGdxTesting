@@ -1,14 +1,19 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.api.collision.ShapeCollision;
+import com.mygdx.game.api.shape.Circle;
 import com.mygdx.game.api.shape.FreePolygon;
 import com.mygdx.game.api.shape.Rectangle;
 import com.mygdx.game.api.shape.Triangle;
 
 
 public class MyGdxGame extends ApplicationAdapter {
+
+	Circle c1;
 
 	FreePolygon poly;
 	float scl = 0f;
@@ -25,7 +30,11 @@ public class MyGdxGame extends ApplicationAdapter {
 		Vector2 v5 = new Vector2(0, 50);
 
 		poly.setPoints(v1, v2, v3, v4, v5);
+		poly.setPos(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
 
+		c1 = new Circle(20);
+
+		c1.setPos(300, 500);
 	}
 
 	@Override
@@ -64,6 +73,26 @@ public class MyGdxGame extends ApplicationAdapter {
 		poly.accelerate(inputAcc);
 		poly.update();
 		poly.render();
+
+		ShapeCollision collision = new ShapeCollision(c1, poly);
+		if(collision.isColliding()) {
+			c1.setColor(new Color(1, 0, 0, 1));
+			poly.setColor(new Color(1, 0, 0, 1));
+
+			Circle hitPoint = new Circle(3);
+			hitPoint.setColor(new Color(0, 0, 1, 1));
+			hitPoint.setPos(collision.getCollisionPoint());
+			hitPoint.render();
+
+		} else {
+			c1.setColor(new Color(1, 1, 1, 1));
+			poly.setColor(new Color(1, 1, 1, 1));
+		}
+
+		c1.render();
+
+
+
 
 	}
 	

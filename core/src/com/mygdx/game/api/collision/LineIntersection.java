@@ -14,10 +14,10 @@ public class LineIntersection {
     Line line;
     RenderableMovableShape[] shapes;
 
-    private boolean intersects = false;
+    private boolean isIntersecting = false;
     private Vector2 intersectionPoint;
 
-    public LineIntersection(Line line, RenderableMovableShape[] shapes) {
+    public LineIntersection(Line line, RenderableMovableShape... shapes) {
         this.line = line;
         this.shapes = shapes;
 
@@ -146,23 +146,23 @@ public class LineIntersection {
     private void checkAndSetClosestPoint(Vector2 intersection) {
         if(intersectionPoint == null) {
             intersectionPoint = intersection;
-            intersects = true;
+            isIntersecting = true;
             return;
         }
         float previousDist = Math.abs(intersectionPoint.cpy().sub(this.line.getP1().cpy()).len2());
         float proposedPointDistance = Math.abs(intersection.cpy().sub(this.line.getP1().cpy()).len2());
         if(proposedPointDistance < previousDist) {
             intersectionPoint = intersection;
-            intersects = true;
+            isIntersecting = true;
         }
     }
 
-    public boolean intersects() {
-        return intersects;
+    public boolean isIntersecting() {
+        return isIntersecting;
     }
 
     public Vector2 getIntersectionPoint() {
-        if(intersects) {
+        if(isIntersecting) {
             return intersectionPoint;
         } else {
             return null;

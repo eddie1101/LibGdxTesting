@@ -7,7 +7,6 @@ public interface IRenderableShape {
 
     Color getColor();
     void setColor(Color color);
-
     void setShapeType(ShapeRenderer.ShapeType type);
     void render();
     ShapeRenderer getRenderer();
