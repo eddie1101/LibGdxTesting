@@ -22,7 +22,7 @@ public class Circle extends RenderableMovableShape {
 
     @Override
     public void render() {
-        renderer.begin();
+        renderer.begin(shapeType);
         renderer.circle(x(), y(), radius);
         renderer.end();
     }

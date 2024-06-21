@@ -87,7 +87,7 @@ public abstract class Polygon extends RenderableMovableShape {
     }
 
     public void render() {
-        renderer.begin(ShapeRenderer.ShapeType.Filled);
+        renderer.begin(shapeType);
         renderer.polygon(getVerticesAsArray());
         renderer.end();
     }

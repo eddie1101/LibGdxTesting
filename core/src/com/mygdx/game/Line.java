@@ -3,7 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
-public class Line implements IRenderableShape {
+public class Line extends RenderableMovableShape {
 
     ShapeRenderer renderer = new ShapeRenderer();
 
@@ -37,7 +37,7 @@ public class Line implements IRenderableShape {
 
     @Override
     public void render() {
-        renderer.begin();
+        renderer.begin(shapeType);
         renderer.line(p1, p2);
         renderer.end();
     }

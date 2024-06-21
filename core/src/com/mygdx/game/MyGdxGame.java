@@ -1,6 +1,8 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 
@@ -99,6 +101,8 @@ public class MyGdxGame extends ApplicationAdapter {
 		if(intersection.intersects()) {
 			Circle circle = new Circle(3);
 			circle.setPos(intersection.getIntersectionPoint());
+			circle.setColor(new Color(1, 0, 0, 1));
+			circle.setShapeType(ShapeRenderer.ShapeType.Filled);
 			hits.add(circle);
 		}
 
