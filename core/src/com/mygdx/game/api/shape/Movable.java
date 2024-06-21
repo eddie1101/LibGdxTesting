@@ -1,19 +1,16 @@
-package com.mygdx.game;
+package com.mygdx.game.api.shape;
 
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Movable {
 
-    private final float DRAG_PERCENT = 0.1f;
+    private final float DRAG_PERCENT = 0.065f;
     private Vector2 position, velocity, dragAmt;
-
-    private boolean isIdle;
 
     public Movable() {
         position = new Vector2();
         velocity = new Vector2();
         dragAmt = new Vector2();
-        this.isIdle = true;
     }
 
     public float x() {

@@ -1,6 +1,10 @@
-package com.mygdx.game;
+package com.mygdx.game.api.collision;
 
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.api.shape.Circle;
+import com.mygdx.game.api.shape.Line;
+import com.mygdx.game.api.shape.Polygon;
+import com.mygdx.game.api.shape.RenderableMovableShape;
 
 import java.util.ArrayList;
 import java.util.List;

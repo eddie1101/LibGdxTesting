@@ -1,8 +1,7 @@
-package com.mygdx.game;
+package com.mygdx.game.api.shape;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
 
 public abstract class RenderableMovableShape extends Movable implements IRenderableShape {
 

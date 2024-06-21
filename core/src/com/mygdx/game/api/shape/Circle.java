@@ -1,6 +1,4 @@
-package com.mygdx.game;
-
-import com.badlogic.gdx.math.Vector2;
+package com.mygdx.game.api.shape;
 
 public class Circle extends RenderableMovableShape {
 

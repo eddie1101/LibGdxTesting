@@ -1,6 +1,5 @@
-package com.mygdx.game;
+package com.mygdx.game.api.shape;
 
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
@@ -8,14 +7,18 @@ import java.util.List;
 
 public abstract class Polygon extends RenderableMovableShape {
 
-    private List<Vector2> vertices = new ArrayList<>();
-    private boolean constructed = false;
+    private final List<Vector2> vertices = new ArrayList<>();
     private float radians = 0;
+    private float scl = 0;
+
+    protected boolean constructed = false;
 
     public Polygon() {
         super();
         renderer.setAutoShapeType(true);
     }
+
+    protected abstract void addVertices();
 
     private float[] getVerticesAsArray() {
         List<Vector2> vertices = getVertexPositions();
@@ -26,8 +29,6 @@ public abstract class Polygon extends RenderableMovableShape {
         }
         return vertexArray;
     }
-
-    protected abstract void addVertices();
 
     protected final void addVertex(Vector2 vertex) {
         this.vertices.add(vertex);
@@ -49,6 +50,9 @@ public abstract class Polygon extends RenderableMovableShape {
             th += radians;
             Vector2 vertex = new Vector2((r * (float) Math.cos(th)), (r * (float) Math.sin(th)));
             vertex.add(center);
+            Vector2 buffer = vertex.cpy().sub(center);
+            buffer.scl(scl);
+            vertex.add(buffer);
             vertex.add(getPos());
             vertices.add(vertex);
         });
@@ -67,14 +71,18 @@ public abstract class Polygon extends RenderableMovableShape {
             constructed = true;
         }
         float x = 0, y = 0;
-        for(Vector2 vertex : vertices) {
-            x += vertex.x;
-            y += vertex.y;
-            if(absolute) {
-                x += getPos().x;
-                y += getPos().y;
+        if(!absolute) {
+            for(Vector2 vertex : vertices) {
+                x += vertex.x;
+                y += vertex.y;
+            }
+        } else {
+            for(Vector2 vertex : getVertexPositions()) {
+                x += vertex.x;
+                y += vertex.y;
             }
         }
+
         return new Vector2(x / vertices.size(), y / vertices.size());
     }
 
@@ -84,6 +92,14 @@ public abstract class Polygon extends RenderableMovableShape {
 
     public void setRotation(float radians) {
         this.radians = radians;
+    }
+
+    public void setScale(float scalar) {
+        this.scl = scalar;
+    }
+
+    public float getScale() {
+        return this.scl;
     }
 
     public void render() {
