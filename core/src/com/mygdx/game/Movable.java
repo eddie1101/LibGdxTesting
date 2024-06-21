@@ -45,7 +45,7 @@ public abstract class Movable {
     }
 
     public void setPos(Vector2 pos) {
-        this.position = pos;
+        this.position = pos.cpy();
     }
 
     public void accelerate(Vector2 dv) {

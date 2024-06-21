@@ -4,21 +4,26 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import java.util.ArrayList;
+
 public class MyGdxGame extends ApplicationAdapter {
 
 	final float ACC = 0.8f;
+	float radians = 0f;
 
 	Circle player, circle;
 	Rectangle rect;
 	Triangle tri;
 	Line line;
-	IRenderableShape[] renderQueue;
+	ArrayList<IRenderableShape> renderQueue;
 	RenderableMovableShape[] collisionObjects;
+	ArrayList<IRenderableShape> hits;
 
 	@Override
 	public void create () {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		player = new Circle(30);
+		player.setPos(Gdx.graphics.getWidth() / 2f, 100);
 		circle = new Circle(200);
 		circle.setPos(1800, 1000);
 		rect = new Rectangle(200, 100);
@@ -28,17 +33,19 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		line = new Line(0, 0, 0, 0);
 
-		renderQueue = new IRenderableShape[5];
-		renderQueue[0] = player;
-		renderQueue[1] = rect;
-		renderQueue[2] = line;
-		renderQueue[3] = tri;
-		renderQueue[4] = circle;
+		renderQueue = new ArrayList<>();
+		renderQueue.add(player);
+		renderQueue.add(rect);
+		renderQueue.add(tri);
+		renderQueue.add(line);
+		renderQueue.add(circle);
 
 		collisionObjects = new RenderableMovableShape[3];
 		collisionObjects[0] = rect;
 		collisionObjects[1] = tri;
 		collisionObjects[2] = circle;
+
+		hits = new ArrayList<>();
 	}
 
 	@Override
@@ -59,11 +66,20 @@ public class MyGdxGame extends ApplicationAdapter {
 			inputVector.add(new Vector2(0, -ACC));
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-			float a = 0;
+			float a = 0; //debugging button lmao
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+			radians -= 0.05f;
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+			radians += 0.05f;
 		}
 		player.accelerate(inputVector);
-
 		player.update();
+
+		rect.setRotation(radians);
+		tri.setRotation(radians);
+		Gdx.app.debug("Main", rect.getVertexPositions().toString());
 
 		Vector2 cursor = new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
 
@@ -78,6 +94,20 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		if(intersection.intersects()) {
 			line.setP2(intersection.getIntersectionPoint());
+		}
+
+		if(intersection.intersects()) {
+			Circle circle = new Circle(3);
+			circle.setPos(intersection.getIntersectionPoint());
+			hits.add(circle);
+		}
+
+		if(hits.size() > 100){
+			hits.remove(0);
+		}
+
+		for(IRenderableShape shape: hits) {
+			shape.render();
 		}
 
 		for(IRenderableShape shape : renderQueue) {

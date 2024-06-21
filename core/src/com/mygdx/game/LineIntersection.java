@@ -2,7 +2,6 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.math.Vector2;
 
-import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,8 +77,8 @@ public class LineIntersection {
                 if (determinant != 0) {
                     Vector2 AC = C.cpy().sub(A);
                     float t1 = AC.crs(CD) / determinant;
-                    //float t2 = -AB.crs(AC) / determinant;
-                    intersection = A.cpy().add(AB.scl(t1));
+//                    float t2 = -AB.crs(AC) / determinant;
+                    intersection = A.cpy().add(AB.cpy().scl(t1));
                 }
             }
 
