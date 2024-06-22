@@ -50,14 +50,4 @@ public class Line extends Polygon {
         renderer.end();
     }
 
-    @Override
-    public ShapeRenderer getRenderer() {
-        return renderer;
-    }
-
-    @Override
-    public void dispose() {
-        renderer.dispose();
-    }
-
 }

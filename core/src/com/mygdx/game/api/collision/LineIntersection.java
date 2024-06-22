@@ -15,22 +15,31 @@ public class LineIntersection {
     RenderableMovableShape[] shapes;
 
     private boolean isIntersecting = false;
-    private Vector2 intersectionPoint;
+    private final List<Vector2> intersectionPoints;
+    private final List<RenderableMovableShape> intersectingShapes;
 
     public LineIntersection(Line line, RenderableMovableShape... shapes) {
+        intersectionPoints = new ArrayList<>();
+        intersectingShapes = new ArrayList<>();
         this.line = line;
         this.shapes = shapes;
 
         for(RenderableMovableShape shape : shapes) {
             if (shape instanceof Polygon) {
-                findIntersection(line, (Polygon) shape);
+                if(findIntersection(line, (Polygon) shape)) {
+                    intersectingShapes.add(shape);
+                }
             } else if (shape instanceof Circle) {
-                findIntersection(line, (Circle) shape);
+                if(findIntersection(line, (Circle) shape)) {
+                    intersectingShapes.add(shape);
+                }
             }
         }
+
+        isIntersecting = !intersectionPoints.isEmpty();
     }
 
-    private void findIntersection(Line line, Polygon poly) {
+    private boolean findIntersection(Line line, Polygon poly) {
         List<Vector2> vertexPositions = poly.getVertexPositions();
         vertexPositions.add(new Vector2(vertexPositions.get(0)));
 
@@ -94,11 +103,11 @@ public class LineIntersection {
 
         }
 
-        intersections.forEach(this::checkAndSetClosestPoint);
+        return intersectionPoints.addAll(intersections);
     }
 
     //https://mathworld.wolfram.com/Circle-LineIntersection.html
-    private void findIntersection(Line line, Circle circle) {
+    private boolean findIntersection(Line line, Circle circle) {
         float r = circle.getRadius();
         float x1 = line.getP1().x - circle.x();
         float x2 = line.getP2().x - circle.x();
@@ -130,43 +139,42 @@ public class LineIntersection {
             float lineMinY = Math.min(A.y, B.y);
             float lineMaxY = Math.max(A.y, B.y);
 
+            boolean ret = false;
             if(intersection0.x >= lineMinX && intersection0.x <= lineMaxX && intersection0.y >=lineMinY && intersection0.y <= lineMaxY) {
-                checkAndSetClosestPoint(intersection0);
+                intersectionPoints.add(intersection0);
+                ret = true;
             }
             if(intersection1.x >= lineMinX && intersection1.x <= lineMaxX && intersection1.y >=lineMinY && intersection1.y <= lineMaxY) {
-                checkAndSetClosestPoint(intersection1);
+                intersectionPoints.add(intersection1);
+                ret = true;
             }
+            return ret;
         }
+        return false;
     }
 
     private int sgn(float x) {
         return x < 0 ? -1 : 1;
     }
 
-    private void checkAndSetClosestPoint(Vector2 intersection) {
-        if(intersectionPoint == null) {
-            intersectionPoint = intersection;
-            isIntersecting = true;
-            return;
-        }
-        float previousDist = Math.abs(intersectionPoint.cpy().sub(this.line.getP1().cpy()).len2());
-        float proposedPointDistance = Math.abs(intersection.cpy().sub(this.line.getP1().cpy()).len2());
-        if(proposedPointDistance < previousDist) {
-            intersectionPoint = intersection;
-            isIntersecting = true;
-        }
-    }
-
     public boolean isIntersecting() {
         return isIntersecting;
     }
 
-    public Vector2 getIntersectionPoint() {
+    public List<Vector2> getIntersectionPoints() {
         if(isIntersecting) {
-            return intersectionPoint;
+            return intersectionPoints;
         } else {
             return null;
         }
+    }
+
+    public List<RenderableMovableShape> getIntersectingShapes() {
+        return intersectingShapes;
+    }
+
+    public boolean isShapeIntersecting(int SID) {
+        return intersectingShapes.stream().anyMatch(e -> e.SID() == SID);
     }
 
 }
