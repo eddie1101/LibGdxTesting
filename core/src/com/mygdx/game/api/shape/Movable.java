@@ -42,7 +42,15 @@ public abstract class Movable {
     }
 
     public void setPos(Vector2 pos) {
-        this.position = pos.cpy();
+        this.position.set(pos);
+    }
+
+    public void setVel(float x, float y) {
+        this.setVel(new Vector2(x, y));
+    }
+
+    public void setVel(Vector2 vel) {
+        this.velocity.set(vel);
     }
 
     public void accelerate(Vector2 dv) {
