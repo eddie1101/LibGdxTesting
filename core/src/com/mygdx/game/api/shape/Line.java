@@ -46,7 +46,9 @@ public class Line extends Polygon {
     @Override
     public void render() {
         renderer.begin(shapeType);
-        renderer.line(p1, p2);
+        Vector2[] ps = new Vector2[2];
+        getVertexPositions().toArray(ps);
+        renderer.line(ps[0], ps[1]);
         renderer.end();
     }
 

@@ -15,6 +15,7 @@ import java.util.List;
 public class MyGdxGame extends ApplicationAdapter {
 
 	Line l;
+	Line line;
 	Circle c1;
 	FreePolygon poly;
 	float scl = 0f;
@@ -34,10 +35,11 @@ public class MyGdxGame extends ApplicationAdapter {
 		poly.setPoints(v1, v2, v3, v4, v5);
 		poly.setPos(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
 
-		c1 = new Circle(20);
-		c1.setPos(300, 500);
+		c1 = new Circle(200);
+		c1.setPos(900, 800);
 
 		l = new Line(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		line = new Line(100, 100, 200, 200);
 	}
 
 	@Override
@@ -63,10 +65,14 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		poly.setScale(scl);
 		poly.setRotation(rot);
-
 		poly.accelerate(inputAcc);
 		poly.update();
 		poly.render();
+
+		lrot += 0.01f;
+		l.setRotation(lrot);
+		l.render();
+		c1.render();
 
 		ShapeCollisionDetector collision = new ShapeCollisionDetector(c1, l, poly);
 		if(collision.isColliding()) {
@@ -78,12 +84,6 @@ public class MyGdxGame extends ApplicationAdapter {
 				hitPoint.render();
 			}
 		}
-
-		l.setRotation(lrot);
-		c1.render();
-		l.render();
-
-		lrot += 0.01f;
 	}
 	
 	@Override
